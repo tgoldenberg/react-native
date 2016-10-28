@@ -20,6 +20,7 @@ const SourceMapConsumer = require('source-map').SourceMapConsumer;
 
 const declareOpts = require('../lib/declareOpts');
 const defaults = require('../../../defaults');
+var fs = require('fs');
 const mime = require('mime-types');
 const path = require('path');
 const url = require('url');
