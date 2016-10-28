@@ -197,6 +197,16 @@ class Server {
     const opts = this._opts = validateOpts(options);
 
     this._projectRoots = opts.projectRoots;
+    this._hasBabelRC = fs.existsSync(this._projectRoots[0] + '/.babelrc');
+    this._babelRCError = false;
+    let parts = this._projectRoots[0].split('/');
+    let last = parts[parts.length-1];
+    let parent = this._projectRoots[0].replace(last, '') + '.babelrc';
+    let parentHasBabelRC = fs.existsSync(parent);
+    if (!this._hasBabelRC && parentHasBabelRC) {
+      this._babelRCError = true;
+      throw new Error('There is a problem with your .babelrc configuration. It looks like you have no .babelrc in the current project but in the parent directory. Either remove the parent .babelrc or create a .babelrc in your current project.')
+    }
     this._bundles = Object.create(null);
     this._changeWatchers = [];
     this._fileChangeListeners = [];
